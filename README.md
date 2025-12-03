@@ -1,4 +1,4 @@
-# If the repository is useful, perhaps you could consider forking it and featuring it to show your support ;)
+# If the repository is useful, perhaps you could consider fork and star it to show your support ;)
 
 
 ---
