@@ -10,6 +10,6 @@
 ---
 
 ## Our beautiful contributors
-<a href="https://github.com/sumanth-0/100LinesOfPythonCode/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=sumanth-0/100LinesOfPythonCode&max=200" alt="Contributors" />
+<a href="https://https://github.com/zquintero246/AgentGrimoire/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=zquintero246/AgentGrimoire&max=200" alt="Contributors" />
 </a>
