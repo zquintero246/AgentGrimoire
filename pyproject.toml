@@ -1,0 +1,6 @@
+# AgentGrimoire is a content repository (tools + manifests), not a Python
+# package — this file only configures the test runner.
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
