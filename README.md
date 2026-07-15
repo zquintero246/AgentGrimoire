@@ -41,16 +41,17 @@ The project stays intentionally minimalist. Its strength comes from community co
 
 ## Repository Structure
 
-The repository is organized into domain-based folders. Each directory groups tools by their purpose within agent workflows.
+The repository is organized into domain-based folders; each tool (a
+**spell**) lives in its own folder with a manifest, an implementation,
+and a short README:
 
-Examples:
-
-- `text/` — text formatting, rewriting, parsing, summarization  
-- `search/` — lightweight scrapers, local search utilities, safe fetchers  
-- `files/` — file operations, conversion utilities, metadata processors  
-- `system/` — shell-level helpers, OS utilities, environment tools  
-- `llm/` — helpers for local inference or model utilities  
-- `network/` — minimal HTTP request helpers  
+```
+<domain>/
+  <spell_name>/
+    spell.json     # manifest: name, description, entrypoint, JSON Schema
+    spell.py       # implementation (stdlib-only unless justified)
+    README.md      # purpose, inputs, outputs, example, safety notes
+```
 
 Tools can be implemented in any language. What matters is that they remain:
 
@@ -64,17 +65,73 @@ Every tool should feel like a small, focused utility that an agent can call dire
 
 ---
 
+## The Spellbook
+
+| Spell | Domain | What it does |
+|---|---|---|
+| `word_count` | `text/` | Words, characters, and lines of a text |
+| `regex_extract` | `text/` | Every match of a regex, capped |
+| `calculate` | `math/` | Safe arithmetic (AST whitelist, never `eval`) |
+| `read_text` | `files/` | Read a local text file, size-capped |
+| `list_directory` | `files/` | Directory entries with type and size |
+| `current_datetime` | `system/` | The current date/time (models can't guess it) |
+| `http_fetch` | `network/` | GET a public URL, size/time-capped, SSRF-guarded |
+
+Every spell is validated in CI: manifests are checked, the whole tree is
+loaded, and each tool is executed against sample inputs.
+
+---
+
 ## Tool Format
 
-Each tool must include:
+Each tool ships three files (see
+[templates/TOOL_TEMPLATE.md](./templates/TOOL_TEMPLATE.md) for the full
+skeleton):
 
-- A clear explanation of its purpose  
-- Usage examples or instructions  
-- Input and output details  
-- Notes on behavior or safety (if applicable)  
-- Minimal external dependencies  
+- **`spell.json`** — the manifest: `name` (matches the folder),
+  `description`, `entrypoint` (`spell.py:function`), and `parameters` as
+  standard JSON Schema. This is what a model reads to decide how to call
+  the tool — write the descriptions for a model.
+- **The implementation** — a plain function with typed inputs and
+  machine-readable output. Errors must carry actionable messages: in
+  agent loops the error text is fed back to the model so it can
+  self-correct.
+- **A folder README** — purpose, inputs/outputs, example, safety notes.
 
 The design philosophy mirrors the Unix style: small components, composed into larger systems.
+
+---
+
+## Using the Grimoire from an orchestrator
+
+The manifest convention is orchestrator-agnostic JSON. With
+[sanctum-engine](https://github.com/zquintero246/sanctum-engine) the whole
+tree loads in one line:
+
+```python
+import asyncio
+from sanctum import Tome, summon
+from sanctum.oracle.ollama import OllamaOracle   # or any local backend
+
+tome = Tome.load_from_directory("path/to/AgentGrimoire")
+entity = summon(OllamaOracle(arcana="qwen2.5:7b"), tome)
+
+result = asyncio.run(entity.ainvoke({"messages": [
+    {"role": "user", "content": "What is (2 + 3) * sqrt(16)? Use a tool."},
+]}))
+print(result["messages"][-1]["content"])
+```
+
+Every `spell.py` is also a self-contained module with zero framework
+imports — copy the file straight into your project, or load it by path
+with `importlib` if you prefer to vendor nothing.
+
+To validate the collection locally:
+
+```sh
+pip install -r requirements-dev.txt
+pytest
+```
 
 ---
 
@@ -97,9 +154,14 @@ High-quality community contributions are encouraged and appreciated.
 
 ---
 
-## Examples (Work in Progress)
+## Examples
 
-If you want an early example, feel free to open an issue.
+The quickest full example is in
+[Using the Grimoire from an orchestrator](#using-the-grimoire-from-an-orchestrator)
+above; every spell folder also carries its own README with a runnable
+snippet. For a complete multi-agent pipeline consuming this repository's
+conventions, see the
+[sanctum-engine examples](https://github.com/zquintero246/sanctum-engine/tree/main/examples).
 
 ---
 

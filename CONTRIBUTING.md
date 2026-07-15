@@ -162,7 +162,35 @@ Since this repo is local-first, tools should never rely on online services unles
 
 ---
 
-## 2.6. Cross-Language Flexibility
+## 2.6. Spell Manifests (auto-loading)
+
+Every tool folder carries a `spell.json` manifest so orchestrators can
+discover and load it without custom wiring:
+
+```json
+{
+  "name": "<folder name>",
+  "description": "One line: what the tool does.",
+  "entrypoint": "spell.py:function_name",
+  "parameters": { "type": "object", "properties": {}, "required": [] }
+}
+```
+
+- `name` must equal the folder name.
+- `parameters` is standard JSON Schema — it is what a model reads when
+  deciding how to call the tool.
+- Python tools are auto-loadable (e.g. sanctum-engine's
+  `Tome.load_from_directory`); tools in other languages document their
+  CLI in the folder README and may add a thin `spell.py` wrapper.
+- Error messages must be **actionable**: in agent loops the error text is
+  fed back to the model so it can self-correct.
+
+CI validates every manifest and executes every spell
+(`pip install -r requirements-dev.txt && pytest`).
+
+---
+
+## 2.7. Cross-Language Flexibility
 
 Tools can be implemented in any programming language.
 
