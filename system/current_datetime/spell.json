@@ -1,0 +1,16 @@
+{
+  "name": "current_datetime",
+  "description": "Return the current date and time as an ISO 8601 string.",
+  "entrypoint": "spell.py:current_datetime",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "timezone": {
+        "type": "string",
+        "description": "Either 'utc' or 'local'.",
+        "default": "utc"
+      }
+    },
+    "required": []
+  }
+}

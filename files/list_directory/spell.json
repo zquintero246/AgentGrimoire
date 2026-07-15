@@ -1,0 +1,21 @@
+{
+  "name": "list_directory",
+  "description": "List the entries of a local directory with type and size.",
+  "entrypoint": "spell.py:list_directory",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "path": {
+        "type": "string",
+        "description": "Directory to list.",
+        "default": "."
+      },
+      "max_entries": {
+        "type": "integer",
+        "description": "Maximum number of entries to return.",
+        "default": 100
+      }
+    },
+    "required": []
+  }
+}

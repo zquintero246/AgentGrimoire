@@ -1,0 +1,24 @@
+{
+  "name": "regex_extract",
+  "description": "Extract every match of a regular expression from a text.",
+  "entrypoint": "spell.py:regex_extract",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "pattern": {
+        "type": "string",
+        "description": "Python regular expression to search for."
+      },
+      "text": {
+        "type": "string",
+        "description": "The text to search in."
+      },
+      "max_matches": {
+        "type": "integer",
+        "description": "Maximum number of matches to return.",
+        "default": 20
+      }
+    },
+    "required": ["pattern", "text"]
+  }
+}

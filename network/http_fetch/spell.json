@@ -1,0 +1,25 @@
+{
+  "name": "http_fetch",
+  "description": "Fetch a public HTTP(S) URL with GET, bounded by size and time.",
+  "entrypoint": "spell.py:http_fetch",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "url": {
+        "type": "string",
+        "description": "The http:// or https:// URL to fetch."
+      },
+      "max_bytes": {
+        "type": "integer",
+        "description": "Maximum number of body bytes to read.",
+        "default": 250000
+      },
+      "timeout": {
+        "type": "number",
+        "description": "Request timeout in seconds.",
+        "default": 10
+      }
+    },
+    "required": ["url"]
+  }
+}

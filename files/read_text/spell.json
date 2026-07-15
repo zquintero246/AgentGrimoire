@@ -1,0 +1,25 @@
+{
+  "name": "read_text",
+  "description": "Read a local text file, bounded by a size cap.",
+  "entrypoint": "spell.py:read_text",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "path": {
+        "type": "string",
+        "description": "Path of the file to read."
+      },
+      "max_bytes": {
+        "type": "integer",
+        "description": "Maximum number of bytes to read.",
+        "default": 65536
+      },
+      "encoding": {
+        "type": "string",
+        "description": "Text encoding.",
+        "default": "utf-8"
+      }
+    },
+    "required": ["path"]
+  }
+}
